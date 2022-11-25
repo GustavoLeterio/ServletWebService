@@ -1,0 +1,43 @@
+package br.com.sisconsultoria.gerenciador.acao;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import br.com.sisconsultoria.modelo.Banco;
+import br.com.sisconsultoria.modelo.Empresa;
+
+public class AtualizarEmpresa {
+
+	public void exec(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String id = request.getParameter("id");
+
+		Empresa empresa = Banco.find(id);
+
+		if (empresa != null) {
+			request.setAttribute("empresa", empresa);
+			request.getRequestDispatcher("./formEmpresa.jsp").forward(request, response);
+		}
+
+		// POST METHOD
+		if (request.getMethod().equals("POST")) {
+			Map<String, String[]> in = request.getParameterMap();
+
+			try {
+				Empresa empresa = new Empresa(Integer.parseInt(in.get("id")[0]), in.get("nome")[0],
+						new SimpleDateFormat("dd/MM/yyyy").parse(in.get("data")[0]));
+				Banco.update(empresa);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			response.sendRedirect("./ListarEmpresas");
+			return;
+		}
+
+	}
+}

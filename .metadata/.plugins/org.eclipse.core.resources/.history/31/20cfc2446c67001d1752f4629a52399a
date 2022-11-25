@@ -1,0 +1,59 @@
+package br.com.sisconsultoria.gerenciador;
+
+import java.rmi.UnexpectedException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+
+public class Banco {
+
+	private static List<Empresa> empresas = new ArrayList<>();
+	private static Integer idSequence = 1;
+
+	public static void add(Empresa empresa) {
+		empresas.add(empresa);
+		idSequence++;
+	}
+
+	public static Collection<Empresa> getEmpresas() {
+		return Collections.unmodifiableCollection(Banco.empresas);
+	}
+
+	public static Empresa returnLastObj() throws Exception {
+		try {
+			return empresas.get(idSequence - 2);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	public static Empresa find(String id) {
+		try {
+			return empresas.get(Integer.parseInt(id) - 1);
+		} catch (Exception e) {
+			return new Empresa(0,"",new Date());
+		}
+		
+	}
+
+	public static void update(Empresa empresa) {
+		Empresa updateTarget = find(empresa.getId());
+		updateTarget.setNome(empresa.getNome());
+		updateTarget.setDataAbertura(empresa.getDataAbertura());
+	}
+
+	public static void delete(String id) {
+		Empresa empresa = find(id);
+		if(Integer.toInt(empresa.getId() )!= 0)
+		empresas.remove(find(id));
+		}
+	
+}

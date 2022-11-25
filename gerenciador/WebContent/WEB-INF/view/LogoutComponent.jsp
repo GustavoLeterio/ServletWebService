@@ -1,0 +1,1 @@
+<a href="./Entrada?acao=Logout">Logout</a>

@@ -1,0 +1,46 @@
+package br.com.sisconsultoria.gerenciador;
+
+import java.io.IOException;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
+import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import br.com.sisconsultoria.modelo.Empresa;
+
+@WebServlet("/NovaEmpresa")
+public class NovaEmpresa extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		Map<String,String[]> in = request.getParameterMap();
+		
+		Date dataAbertura = null;
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			dataAbertura = sdf.parse(in.get("data")[0]);
+		} catch (ParseException e) {
+			throw new ServletException(e);
+		}
+		
+		Empresa empresa = new Empresa(1 + Banco.getEmpresas().size(), in.get("nome")[0], dataAbertura);
+		Banco.add(empresa);
+
+		//getRequestDispatcher manda uma Requisição ServerSide, mantendo dados da última requisição
+		//Caso o user recarregue a página, a requisão será repetida e a empresa será duplicada no banco.
+		//request.getRequestDispatcher("/ListarEmpresas").forward(request, response);
+
+		//Porém o sendRedirect envia uma resposta ao navegador, para redirecionar para outra página, assim a requisição passada some.
+		//Não gerando este problema.
+		response.sendRedirect("ListarEmpresas");
+	}
+
+}

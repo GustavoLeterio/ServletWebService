@@ -1,0 +1,53 @@
+package br.com.sisconsultoria.modelo;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+public class Banco {
+
+	private static List<Empresa> empresas = new ArrayList<>();
+	private static List<Usuario> usuarios = new ArrayList<>();
+	private static Integer idSequence = 1;
+
+	public static void add(Empresa empresa) {
+		empresas.add(empresa);
+		idSequence++;
+	}
+
+	public static Collection<Empresa> getEmpresas() {
+		return Collections.unmodifiableCollection(Banco.empresas);
+	}
+
+	public static Empresa returnLastObj() throws Exception {
+		try {
+			return empresas.get(idSequence - 2);
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+
+	public static Empresa find(String id) {
+		try {
+			return empresas.get(Integer.parseInt(id) - 1);
+		} catch (Exception e) {
+			return null;
+		}
+
+	}
+
+	public static void update(Empresa empresa) {
+		Empresa updateTarget = find(empresa.getId());
+		if (updateTarget != null) {
+			updateTarget.setNome(empresa.getNome());
+			updateTarget.setDataAbertura(empresa.getDataAbertura());
+		}
+	}
+
+	public static void delete(String id) {
+		Empresa empresa = find(id);
+		if (empresa != null)
+			empresas.remove(Integer.parseInt(empresa.getId()) - 1);
+	}
+}

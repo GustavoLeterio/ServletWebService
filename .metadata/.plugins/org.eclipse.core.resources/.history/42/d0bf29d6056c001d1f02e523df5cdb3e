@@ -1,0 +1,23 @@
+package br.com.sisconsultoria.gerenciador.acao;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import br.com.sisconsultoria.modelo.Banco;
+import br.com.sisconsultoria.modelo.Empresa;
+
+public class ListarEmpresa {
+	public String exec(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("empresas", Banco.getEmpresas());
+		try {
+			request.setAttribute("empresa", (Empresa) Banco.returnLastObj());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return "Forward:ListarEmpresas.jsp";
+	}
+}

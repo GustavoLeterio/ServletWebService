@@ -1,0 +1,39 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu primeiro Servlet</title>
+</head>
+
+<body>
+	<c:if test="${not empty empresa}">
+		<form action="./Entrada?acao=AtualizarEmpresa"  method="post">
+			<input type="hidden" name="id" value="${empresa.getId()}">
+	        <label for="nome">Nome:</label>
+	        <input type="text" value="${empresa.getNome()}" name="nome">
+	        <br>
+	        <label for="data">Data de Abertura:</label>
+	        <input type="text" value="${empresa.getDataAberturaFormatada()}" name="data">
+	        <br>
+	        <input type="submit" value="Enviar">
+    	</form>
+    	<a href="./ListarEmpresas">Listar Empresas</a>
+ 	</c:if>
+	<c:if test="${empty empresa}">
+		<form action="./NovaEmpresa" method="post">
+	        <label for="nome">Nome:</label>
+	        <input type="text" name="nome">
+	        <br>
+	        <label for="data">Data de Abertura:</label>
+	        <input type="text" name="data">
+	        <br>
+	        <input type="submit" value="Enviar">
+    	</form>
+    	<a href="./ListarEmpresas">Listar Empresas</a>
+	</c:if>
+</body>
+</html>

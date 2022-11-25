@@ -1,0 +1,5 @@
+package br.com.sisconsultoria.gerenciador.acao;
+
+public class ListarEmpresa {
+
+}

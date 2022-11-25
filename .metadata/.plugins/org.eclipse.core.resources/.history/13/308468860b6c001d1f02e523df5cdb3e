@@ -1,0 +1,44 @@
+package br.com.sisconsultoria.gerenciador.servlet;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import br.com.sisconsultoria.gerenciador.acao.Acao;
+
+@WebServlet("/Entrada")
+public class UnicaEntradaServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String in = request.getParameter("acao");
+
+		if (in != null) {
+
+			@SuppressWarnings("deprecation")
+			Acao acao;
+			try {
+				acao = (Acao) Class.forName("br.com.sisconsultoria.gerenciador.acao" + in).newInstance();
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			String path = acao.exec(request, response);
+
+			String[] pathArray = path.split(":");
+			if (pathArray[0].equals("Forward")) {
+				request.getRequestDispatcher("WEB-INF/view/" + pathArray[1]).forward(request, response);
+				return;
+			}
+			response.sendRedirect("WEB-INF/view/" + pathArray[1]);
+			return;
+		}
+		response.sendRedirect("Entrada?acao=ListarEmpresa");
+		return;
+	}
+
+}
